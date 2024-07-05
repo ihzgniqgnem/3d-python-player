@@ -16,7 +16,7 @@ def cos(x):
     return np.cos(x)
 class list(np.ndarray):
     pass
-@lru_cache(maxsize=1024)
+#@lru_cache(maxsize=1024)
 def matrix_multiply(A, B):
     if isinstance(A, list):
         A=np.array(A)
