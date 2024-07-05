@@ -9,16 +9,7 @@ class point(debug_mode.Base):
         self.color=(int(x/100*255),int(y/100*255),int(z/100*255))
     @lru_cache(maxsize=1024)
     def prj(self,screen):
-        a=math.matrix_multiply(math.matrix_multiply(((1,0,0),
-                                                     (0,math.cos(screen.xangle),-math.sin(screen.xangle)),
-                                                     (0,math.sin(screen.xangle),math.cos(screen.xangle))),
-                                                    ((math.cos(screen.yangle),0,math.sin(screen.yangle)),
-                                                     (0,1,0),
-                                                     (-math.sin(screen.yangle),0,math.cos(screen.yangle)))),
-                                ((math.cos(screen.zangle),-math.sin(screen.zangle),0),
-                                (math.sin(screen.zangle),math.cos(screen.zangle),0),
-                                (0,0,1)))
-        b=math.matrix_multiply(a,((self.x-screen.xpos,),(self.y-screen.ypos,),(self.z-screen.zpos,)))
+        b=math.matrix_multiply(screen.a,((self.x-screen.xpos,),(self.y-screen.ypos,),(self.z-screen.zpos,)))
         return [math.round(b[0][0]+screen.width/2),math.round(b[1][0]+screen.height/2)]
     def run(self,func):
         func(self)
@@ -32,6 +23,27 @@ class screen():
         self.xpos = xpos
         self.ypos = ypos
         self.zpos = zpos
+    def __setattr__(self, obj, value):
+        if obj=="xangle":
+            self.xangle=value
+        elif obj=="yangle":
+            self.yangle=value
+        elif obj=="zangle":
+            self.zangle=value
+        else:
+            super().__setattr__(obj, value)
+        try:
+            self.a=math.matrix_multiply(math.matrix_multiply(((1,0,0),
+                                                         (0,math.cos(self.xangle),-math.sin(self.xangle)),
+                                                         (0,math.sin(self.xangle),math.cos(self.xangle))),
+                                                        ((math.cos(self.yangle),0,math.sin(self.yangle)),
+                                                         (0,1,0),
+                                                         (-math.sin(self.yangle),0,math.cos(self.yangle)))),
+                                    ((math.cos(self.zangle),-math.sin(self.zangle),0),
+                                    (math.sin(self.zangle),math.cos(self.zangle),0),
+                                    (0,0,1)))
+        except:
+            pass
 class face():
     def __init__(self,points):
         self.data=points
