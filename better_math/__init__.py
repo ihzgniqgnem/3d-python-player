@@ -18,10 +18,10 @@ class list(np.ndarray):
     pass
 #@lru_cache(maxsize=1024)
 def matrix_multiply(A, B):
-    if isinstance(A, list):
-        A=np.array(A)
-    if isinstance(B, list):
-        B=np.array(B)
+    # if isinstance(A, list):
+    #     A=np.array(A)
+    # if isinstance(B, list):
+    #     B=np.array(B)
     C=np.dot(A,B)
     #C=tuple([tuple(i) for i in C])
     return C
